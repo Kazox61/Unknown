@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvab3i4s6hvy7"]
+
+[ext_resource type="Script" path="res://scripts/game/actor/ActorServer.cs" id="1_kemni"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iulyj"]
+albedo_color = Color(0, 0.536759, 0.966432, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bmmi0"]
+material = SubResource("StandardMaterial3D_iulyj")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vpinj"]
+size = Vector3(1, 2, 1)
+
+[node name="ActorServer" type="CharacterBody3D"]
+script = ExtResource("1_kemni")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_bmmi0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_vpinj")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 85, 48)
+fov = 7.0
+far = 1000.0

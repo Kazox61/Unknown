@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8xkarq4llfng"]
+
+[ext_resource type="Script" path="res://scripts/game/client/ControllerClient.cs" id="1_nhpxt"]
+
+[node name="ControllerClient" type="Node"]
+script = ExtResource("1_nhpxt")

@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://cx1f36b155a3l"]
+
+[ext_resource type="Script" path="res://scripts/game/LoadScene.cs" id="1_bqfqn"]
+[ext_resource type="PackedScene" uid="uid://cv7xluspvpsij" path="res://scenes/client_scene.tscn" id="2_0e4fn"]
+[ext_resource type="PackedScene" uid="uid://c8jm348pnar23" path="res://scenes/server_scene.tscn" id="3_5x20b"]
+
+[node name="LoadScene" type="Node"]
+script = ExtResource("1_bqfqn")
+ClientScene = ExtResource("2_0e4fn")
+ServerScene = ExtResource("3_5x20b")

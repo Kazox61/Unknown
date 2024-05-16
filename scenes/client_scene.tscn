@@ -1,0 +1,115 @@
+[gd_scene load_steps=10 format=3 uid="uid://cv7xluspvpsij"]
+
+[ext_resource type="PackedScene" uid="uid://u4w4bepbxm2q" path="res://assets/maps/map1/map_1.tscn" id="1_s3qqn"]
+[ext_resource type="PackedScene" uid="uid://bqd61i6hq5eot" path="res://assets/ui/joystick/joystick.tscn" id="2_01cdv"]
+[ext_resource type="Script" path="res://scripts/game/client/ControllerClient.cs" id="3_kdwcl"]
+[ext_resource type="Script" path="res://scripts/game/client/ClientMessageManager.cs" id="4_cne3e"]
+[ext_resource type="PackedScene" uid="uid://cg1mq8qhgoync" path="res://assets/game/actor_client.tscn" id="4_ky0tp"]
+[ext_resource type="Script" path="res://scripts/ui/TouchInput.cs" id="5_5guph"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6n5xc"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_52b21"]
+sky_material = SubResource("ProceduralSkyMaterial_6n5xc")
+
+[sub_resource type="Environment" id="Environment_h2tba"]
+background_mode = 2
+sky = SubResource("Sky_52b21")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="GameScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_h2tba")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="map1" parent="." instance=ExtResource("1_s3qqn")]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="JoystickLeft" parent="UI" node_paths=PackedStringArray("_touchInput", "_joystickKnob", "_joystickRing") instance=ExtResource("2_01cdv")]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_right = 0.0
+offset_top = -400.0
+offset_right = 600.0
+grow_horizontal = 1
+grow_vertical = 0
+_touchInput = NodePath("../../TouchInput")
+_joystickKnob = NodePath("Knob")
+_joystickRing = NodePath("Ring")
+
+[node name="Knob" parent="UI/JoystickLeft" index="0"]
+auto_translate_mode = 1
+modulate = Color(0.192157, 0.407843, 1, 1)
+offset_left = 190.0
+offset_top = 160.0
+offset_right = 290.0
+offset_bottom = 260.0
+
+[node name="Ring" parent="UI/JoystickLeft" index="1"]
+modulate = Color(0.191991, 0.407939, 1, 1)
+offset_left = 140.0
+offset_top = 110.0
+offset_right = 340.0
+offset_bottom = 310.0
+
+[node name="JoystickRight" parent="UI" node_paths=PackedStringArray("_touchInput", "_joystickKnob", "_joystickRing") instance=ExtResource("2_01cdv")]
+auto_translate_mode = 1
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+offset_left = -600.0
+offset_top = -400.0
+grow_horizontal = 0
+grow_vertical = 0
+_touchInput = NodePath("../../TouchInput")
+_joystickKnob = NodePath("Knob")
+_joystickRing = NodePath("Ring")
+
+[node name="Knob" parent="UI/JoystickRight" index="0"]
+auto_translate_mode = 1
+modulate = Color(1, 0.4, 0, 1)
+offset_left = 348.0
+offset_top = 165.0
+offset_right = 448.0
+offset_bottom = 265.0
+
+[node name="Ring" parent="UI/JoystickRight" index="1"]
+modulate = Color(1, 0.4, 0, 1)
+offset_left = 298.0
+offset_top = 115.0
+offset_right = 498.0
+offset_bottom = 315.0
+
+[node name="ControllerClient" type="Node" parent="." node_paths=PackedStringArray("ClientMessageManager", "JoystickMove")]
+script = ExtResource("3_kdwcl")
+ClientMessageManager = NodePath("../ClientMessageHandler")
+JoystickMove = NodePath("../UI/JoystickLeft")
+PrefabActorClient = ExtResource("4_ky0tp")
+
+[node name="ClientMessageHandler" type="Node" parent="."]
+script = ExtResource("4_cne3e")
+
+[node name="TouchInput" type="Node" parent="."]
+script = ExtResource("5_5guph")
+
+[editable path="UI/JoystickLeft"]
+[editable path="UI/JoystickRight"]

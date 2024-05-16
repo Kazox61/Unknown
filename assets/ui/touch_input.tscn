@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://blm766rfdb1ky"]
+
+[ext_resource type="Script" path="res://scripts/ui/TouchInput.cs" id="1_7wu74"]
+
+[node name="TouchInput" type="Node"]
+script = ExtResource("1_7wu74")

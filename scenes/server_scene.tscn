@@ -1,0 +1,38 @@
+[gd_scene load_steps=8 format=3 uid="uid://c8jm348pnar23"]
+
+[ext_resource type="PackedScene" uid="uid://u4w4bepbxm2q" path="res://assets/maps/map1/map_1.tscn" id="1_6vmfp"]
+[ext_resource type="Script" path="res://scripts/game/server/ServerMessageManager.cs" id="3_lxv3j"]
+[ext_resource type="PackedScene" uid="uid://dvab3i4s6hvy7" path="res://assets/game/actor_server.tscn" id="3_nnv2x"]
+[ext_resource type="Script" path="res://scripts/game/ControllerVisionUpdate.cs" id="3_qmspr"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ddxsq"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_g7dps"]
+sky_material = SubResource("ProceduralSkyMaterial_ddxsq")
+
+[sub_resource type="Environment" id="Environment_oju56"]
+background_mode = 2
+sky = SubResource("Sky_g7dps")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="ServerScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_oju56")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="map1" parent="." instance=ExtResource("1_6vmfp")]
+
+[node name="ServerMessageHandler" type="Node" parent="."]
+script = ExtResource("3_lxv3j")
+
+[node name="ControllerVisionUpdate" type="Node" parent="." node_paths=PackedStringArray("ServerMessageManager")]
+script = ExtResource("3_qmspr")
+ServerMessageManager = NodePath("../ServerMessageHandler")
+PrefabActorServer = ExtResource("3_nnv2x")
