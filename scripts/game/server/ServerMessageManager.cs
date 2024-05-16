@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 using GodotTask;
@@ -27,7 +28,12 @@ public partial class ServerMessageManager : Node {
 
 		_client = new UdpClient(new IPEndPoint(IPAddress.Parse(Configuration.Ip), Configuration.Port));
 
-		ProcessAsync().Forget();
+		var thread = new Thread(StartProcess);
+		thread.Start();
+	}
+	
+	private void StartProcess() {
+		ProcessAsync();
 	}
 	
 	private async GDTask ProcessAsync() {
@@ -38,7 +44,7 @@ public partial class ServerMessageManager : Node {
 				_connectedClients.Add(result.RemoteEndPoint);
 				
 				GD.Print("New Device connected");
-				OnClientConnect?.Invoke(result.RemoteEndPoint);
+				Callable.From(() => OnClientConnect?.Invoke(result.RemoteEndPoint)).CallDeferred();
 			}
 
 			var stream = new Reader(result.Buffer);
@@ -47,10 +53,9 @@ public partial class ServerMessageManager : Node {
 			var y = stream.ReadSingle();
 
 			GD.Print($"[Server] {tick} " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-			
-			OnInputMessage?.Invoke(result.RemoteEndPoint, tick, x, y);
-			
-			await GDTask.Yield(PlayerLoopTiming.Process);
+
+			Callable.From(() => OnInputMessage?.Invoke(result.RemoteEndPoint, tick, x, y)).CallDeferred();
+			//OnInputMessage?.Invoke(result.RemoteEndPoint, tick, x, y);
 		}
 	}
 

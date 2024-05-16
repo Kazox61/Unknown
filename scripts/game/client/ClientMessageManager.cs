@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Godot;
 using GodotTask;
 using Unknown.Utilities;
@@ -16,10 +18,15 @@ public partial class ClientMessageManager : Node {
 	public override void _Ready() {
 		_client = new UdpClient();
 		_client.Client.Bind(new IPEndPoint(IPAddress.Any, 19098));
-		ProcessAsync().Forget();
+		var thread = new Thread(StartProcess);
+		thread.Start();
+	}
+
+	private void StartProcess() {
+		ProcessAsync();
 	}
 	
-	private async GDTask ProcessAsync() {
+	private async Task ProcessAsync() {
 		while (true) {
 			try {
 				var result = await _client.ReceiveAsync();
@@ -29,9 +36,9 @@ public partial class ClientMessageManager : Node {
 				var x = reader.ReadSingle();
 				var y = reader.ReadSingle();
 				
-				OnMessage?.Invoke(tick, x, y);
-			
-				await GDTask.Yield(PlayerLoopTiming.Process);
+				GD.Print($"[Client] {tick} received " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+				Callable.From(() => OnMessage?.Invoke(tick, x, y)).CallDeferred();
+				//OnMessage?.Invoke(tick, x, y);
 			}
 			catch (Exception e) {
 				GD.Print(e);
