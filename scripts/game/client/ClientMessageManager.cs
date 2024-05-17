@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Godot;
@@ -16,13 +14,11 @@ using Unknown.Utilities;
 namespace Unknown.Game;
 
 public partial class ClientMessageManager : Node {
-	public Action<int, float, float> OnMessage;
-
 	private UdpClient _client;
 
 	public override void _Ready() {
 		_client = new UdpClient();
-		_client.Client.Bind(new IPEndPoint(IPAddress.Any, GetAvailablePort(2000)));
+		_client.Client.Bind(new IPEndPoint(IPAddress.Any, 5001));
 		var thread = new Thread(StartProcess);
 		thread.Start();
 	}
@@ -71,6 +67,7 @@ public partial class ClientMessageManager : Node {
 		}
 	}
 
+	//Cant use this on android because accessing the path is forbidden
 	private static int GetAvailablePort(int startingPort) {
 		var portArray = new List<int>();
 
@@ -109,22 +106,5 @@ public partial class ClientMessageManager : Node {
 		await message.Encode();
 		var buffer = await message.Build();
 		await _client.SendAsync(buffer, buffer.Length, Configuration.Ip, Configuration.Port);
-	}
-
-	public async GDTask SendAsync(string text) {
-		var data = Encoding.UTF8.GetBytes(text);
-		await _client.SendAsync(data, data.Length, Configuration.Ip, Configuration.Port);
-	}
-
-	public async GDTask SendInput(int tick, Vector2 input) {
-		var stream = new MemoryStream();
-		await stream.WriteInt(tick);
-		var x = (float)Math.Round(input.X, 2);
-		var y = (float)Math.Round(input.Y, 2);
-
-		await stream.WriteSingle(x);
-		await stream.WriteSingle(y);
-		var bytes = stream.GetBuffer();
-		await _client.SendAsync(bytes, bytes.Length, Configuration.Ip, Configuration.Port);
 	}
 }
