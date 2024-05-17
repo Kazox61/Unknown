@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://scripts/game/actor/ActorClient.cs" id="1_qucn0"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y4cxb"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m0ln8"]
 albedo_color = Color(0, 0.536759, 0.966432, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ctnni"]
-material = SubResource("StandardMaterial3D_y4cxb")
+material = SubResource("StandardMaterial3D_m0ln8")
 
 [node name="ActorClient" type="Node3D"]
 script = ExtResource("1_qucn0")

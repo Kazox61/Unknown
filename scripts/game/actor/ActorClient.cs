@@ -5,8 +5,21 @@ using GodotTask;
 namespace Unknown.Game; 
 
 public partial class ActorClient : Node3D {
+	public int MatchPlayerId;
+	
 	private CancellationTokenSource _cancellationTokenSource = new();
 
+	public static ActorClient Create(int matchPlayerId, bool isEnemy) {
+		var actor = isEnemy 
+			? ControllerClient.Instance.PrefabActorClientEnemy.Instantiate<ActorClient>() 
+			: ControllerClient.Instance.PrefabActorClient.Instantiate<ActorClient>();
+		SpawnerSceneTree.Instance.Spawn(actor);
+
+		actor.MatchPlayerId = matchPlayerId;
+
+		return ControllerClient.Instance.AddActor(actor);
+	}
+	
 	public void StartLerpPosition(Vector3 endPosition) {
 		_cancellationTokenSource.Cancel();
 		_cancellationTokenSource = new CancellationTokenSource();

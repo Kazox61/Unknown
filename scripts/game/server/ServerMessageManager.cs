@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Threading.Tasks;
 using Godot;
 using GodotTask;
+using Unknown.Game.Protocol;
 using Unknown.Utilities;
 
 namespace Unknown.Game;
@@ -14,14 +12,10 @@ namespace Unknown.Game;
 public partial class ServerMessageManager : Node {
 	public static ServerMessageManager Instance;
 
+	public MessageHub MessageHub = new();
+
 	private UdpClient _client;
-
 	private readonly List<IPEndPoint> _connectedClients = new();
-
-	
-	public delegate void ClientConnectEventHandler(IPEndPoint ipEndPoint);
-	public ClientConnectEventHandler OnClientConnect;
-	public Action<IPEndPoint, int, float, float> OnInputMessage;
 
 	public override void _Ready() {
 		Instance = this;
@@ -33,13 +27,26 @@ public partial class ServerMessageManager : Node {
 	}
 	
 	private void StartProcess() {
-		ProcessAsync();
+		ProcessAsync().Forget();
 	}
 	
 	private async GDTask ProcessAsync() {
 		while (true) {
 			var result = await _client.ReceiveAsync();
+				
+			var reader = new Reader(result.Buffer);
+				
+			var messageId = reader.ReadInt16();
+			var messageSize = reader.ReadInt24();
 
+			var message = messageSize > 0 ? MessageFactory.GetMessage((MessageId)messageId, result.RemoteEndPoint, reader) : MessageFactory.GetMessage((MessageId)messageId, result.RemoteEndPoint);
+
+			message.Decode();
+			
+			Callable.From(() => message.Process().Forget()).CallDeferred();
+			Callable.From(() => MessageHub.InvokeCallback((MessageId)messageId, message)).CallDeferred();
+
+			/*
 			if (!_connectedClients.Contains(result.RemoteEndPoint)) {
 				_connectedClients.Add(result.RemoteEndPoint);
 				
@@ -56,12 +63,25 @@ public partial class ServerMessageManager : Node {
 
 			Callable.From(() => OnInputMessage?.Invoke(result.RemoteEndPoint, tick, x, y)).CallDeferred();
 			//OnInputMessage?.Invoke(result.RemoteEndPoint, tick, x, y);
+			*/
 		}
 	}
 
-	public async GDTask Broadcast(byte[] bytes) {
+	public void AddClient(IPEndPoint ipEndPoint) {
+		if (!_connectedClients.Contains(ipEndPoint)) {
+			_connectedClients.Add(ipEndPoint);
+		}
+	}
+	
+	public async GDTask SendMessage(IPEndPoint ipEndPoint, ProtocolMessage message) {
+		await message.Encode();
+		var buffer = await message.Build();
+		await _client.SendAsync(buffer, buffer.Length, ipEndPoint);
+	}
+
+	public async GDTask BroadcastMessage(ProtocolMessage message) {
 		foreach (var connectedClient in _connectedClients) {
-			await _client.SendAsync(bytes, bytes.Length, connectedClient);
+			SendMessage(connectedClient, message).Forget();
 		}
 	}
 }

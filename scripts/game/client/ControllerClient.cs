@@ -1,51 +1,45 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using GodotTask;
+using Unknown.Game.Protocol;
 using Unknown.UI;
 
 namespace Unknown.Game; 
 
 public partial class ControllerClient : Node {
+	public static ControllerClient Instance;
+	
 	[Export] public ClientMessageManager ClientMessageManager;
 	[Export] public Joystick JoystickMove;
 	[Export] public PackedScene PrefabActorClient;
+	[Export] public PackedScene PrefabActorClientEnemy;
 
-	private ActorClient _actorClient;
+	
+	private readonly List<ActorClient> _actorClients = new();
 	
 	public int Tick;
-	
-	public override void _EnterTree() {
-		ClientMessageManager.OnMessage += OnMessage;
-	}
-
-	public override void _ExitTree() {
-		ClientMessageManager.OnMessage -= OnMessage;
-	}
 
 	public override void _Ready() {
-		//Test().Forget();
+		Instance = this;
 	}
 
-	private void OnMessage(int tick, float x, float y) {
-		if (_actorClient == null) {
-			_actorClient = PrefabActorClient.Instantiate<ActorClient>();
-			AddChild(_actorClient);
-		}
-
-		GD.Print($"[Client] {tick} received " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-		_actorClient.StartLerpPosition(new Vector3(x, 1, y));
-	}
 	public override void _Process(double delta) {
-		ClientMessageManager.SendInput(Tick, JoystickMove.Value).Forget();
-		GD.Print($"[Client] {Tick} " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+		ClientMessageManager.SendMessage(new PlayerInputMessage(
+			JoystickMove.Value, Vector2.Zero
+		)).Forget();
+		//ClientMessageManager.SendInput(Tick, JoystickMove.Value).Forget();
+		//GD.Print($"[Client] {Tick} " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 		Tick += 1;
 	}
+	
+	public ActorClient AddActor(ActorClient actor ) {
+		_actorClients.Add(actor);
+		return actor;
+	}
 
-	public async GDTask Test() {
-		GD.Print("Start Test");
-		await GDTask.Delay(TimeSpan.FromSeconds(10));
-		GD.Print("[Client] " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-		ClientMessageManager.SendInput(Tick, new Vector2(0.69f, 0.15f)).Forget();
+	public ActorClient GetActor(int matchPlayerId) {
+		return _actorClients.FirstOrDefault(actor => actor.MatchPlayerId == matchPlayerId);
 	}
 }

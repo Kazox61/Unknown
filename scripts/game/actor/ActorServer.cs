@@ -4,14 +4,22 @@ using Godot;
 namespace Unknown.Game; 
 
 public partial class ActorServer : CharacterBody3D {
-	public IPEndPoint IpEndPoint;
-	
 	private const float Speed = 64f;
 	private const float Friction = 10f;
 	
-	public uint Id;
+	public int MatchPlayerId;
+	public IPEndPoint IpEndPoint;
 	public Vector2 Input = Vector2.Zero;
 	public int Tick;
+	
+	public static ActorServer Create(IPEndPoint ipEndPoint) {
+		var actor = ControllerVisionUpdate.Instance.PrefabActorServer.Instantiate<ActorServer>();
+		SpawnerSceneTree.Instance.Spawn(actor);
+
+		actor.IpEndPoint = ipEndPoint;
+		
+		return ControllerVisionUpdate.Instance.AddActor(actor);
+	}
 	
 	public override void _Process(double delta) { 
 		var velocity = Velocity;
