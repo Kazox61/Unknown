@@ -35,6 +35,7 @@ public class MatchJoinOkMessage : ProtocolMessage {
 	public override GDTask Process() {
 		var actor = ActorClient.Create(MatchPlayerId,false);
 		actor.GlobalPosition = new Vector3(SpawnPosition.X, 1, SpawnPosition.Y);
+		PlayerInputController.Instance.ActorClient = actor;
 
 		GD.Print($"Match Joined with MatchPlayerId: {MatchPlayerId}");
 		return GDTask.CompletedTask;

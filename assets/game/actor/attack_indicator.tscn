@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://5slfmlx7aheu"]
+
+[ext_resource type="Script" path="res://scripts/game/actor/AttackIndicator.cs" id="1_ifqlp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fdpmw"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_jxj0u"]
+
+[node name="AttackIndicator" type="MeshInstance3D"]
+material_override = SubResource("StandardMaterial3D_fdpmw")
+mesh = SubResource("ImmediateMesh_jxj0u")
+script = ExtResource("1_ifqlp")

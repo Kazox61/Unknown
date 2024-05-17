@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cv7xluspvpsij"]
+[gd_scene load_steps=12 format=3 uid="uid://cv7xluspvpsij"]
 
 [ext_resource type="PackedScene" uid="uid://c47d2qgvo3s7w" path="res://assets/maps/map2/map.tscn" id="1_vnho0"]
 [ext_resource type="PackedScene" uid="uid://bqd61i6hq5eot" path="res://assets/ui/joystick/joystick.tscn" id="2_01cdv"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cg1mq8qhgoync" path="res://assets/game/actor_client.tscn" id="4_ky0tp"]
 [ext_resource type="Script" path="res://scripts/ui/TouchInput.cs" id="5_5guph"]
 [ext_resource type="PackedScene" uid="uid://cd5tgvji6ydbo" path="res://assets/game/actor_client_enemy.tscn" id="5_77gos"]
+[ext_resource type="Script" path="res://scripts/game/PlayerInputController.cs" id="8_grcm3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6n5xc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -101,10 +102,9 @@ offset_top = 115.0
 offset_right = 498.0
 offset_bottom = 315.0
 
-[node name="ControllerClient" type="Node" parent="." node_paths=PackedStringArray("ClientMessageManager", "JoystickMove")]
+[node name="ControllerClient" type="Node" parent="." node_paths=PackedStringArray("ClientMessageManager")]
 script = ExtResource("3_kdwcl")
 ClientMessageManager = NodePath("../ClientMessageHandler")
-JoystickMove = NodePath("../UI/JoystickLeft")
 PrefabActorClient = ExtResource("4_ky0tp")
 PrefabActorClientEnemy = ExtResource("5_77gos")
 
@@ -113,6 +113,12 @@ script = ExtResource("4_cne3e")
 
 [node name="TouchInput" type="Node" parent="."]
 script = ExtResource("5_5guph")
+
+[node name="PlayerInputController" type="Node" parent="." node_paths=PackedStringArray("JoystickMove", "JoystickAim", "ClientMessageManager")]
+script = ExtResource("8_grcm3")
+JoystickMove = NodePath("../UI/JoystickLeft")
+JoystickAim = NodePath("../UI/JoystickRight")
+ClientMessageManager = NodePath("../ClientMessageHandler")
 
 [editable path="UI/JoystickLeft"]
 [editable path="UI/JoystickRight"]

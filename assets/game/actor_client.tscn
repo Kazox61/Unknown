@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cg1mq8qhgoync"]
+[gd_scene load_steps=5 format=3 uid="uid://cg1mq8qhgoync"]
 
 [ext_resource type="Script" path="res://scripts/game/actor/ActorClient.cs" id="1_qucn0"]
+[ext_resource type="PackedScene" uid="uid://5slfmlx7aheu" path="res://assets/game/actor/attack_indicator.tscn" id="2_chlja"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m0ln8"]
 albedo_color = Color(0, 0.536759, 0.966432, 1)
@@ -8,8 +9,9 @@ albedo_color = Color(0, 0.536759, 0.966432, 1)
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ctnni"]
 material = SubResource("StandardMaterial3D_m0ln8")
 
-[node name="ActorClient" type="Node3D"]
+[node name="ActorClient" type="Node3D" node_paths=PackedStringArray("AttackIndicator")]
 script = ExtResource("1_qucn0")
+AttackIndicator = NodePath("AttackIndicator")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -19,3 +21,5 @@ mesh = SubResource("CapsuleMesh_ctnni")
 transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 85, 48)
 fov = 7.0
 far = 1000.0
+
+[node name="AttackIndicator" parent="." instance=ExtResource("2_chlja")]

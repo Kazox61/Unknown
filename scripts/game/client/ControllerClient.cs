@@ -12,7 +12,6 @@ public partial class ControllerClient : Node {
 	public static ControllerClient Instance;
 	
 	[Export] public ClientMessageManager ClientMessageManager;
-	[Export] public Joystick JoystickMove;
 	[Export] public PackedScene PrefabActorClient;
 	[Export] public PackedScene PrefabActorClientEnemy;
 
@@ -23,15 +22,6 @@ public partial class ControllerClient : Node {
 
 	public override void _Ready() {
 		Instance = this;
-	}
-
-	public override void _Process(double delta) {
-		ClientMessageManager.SendMessage(new PlayerInputMessage(
-			JoystickMove.Value, Vector2.Zero
-		)).Forget();
-		//ClientMessageManager.SendInput(Tick, JoystickMove.Value).Forget();
-		//GD.Print($"[Client] {Tick} " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-		Tick += 1;
 	}
 	
 	public ActorClient AddActor(ActorClient actor ) {
