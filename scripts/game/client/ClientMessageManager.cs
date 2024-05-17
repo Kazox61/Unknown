@@ -18,7 +18,7 @@ public partial class ClientMessageManager : Node {
 
 	public override void _Ready() {
 		_client = new UdpClient();
-		_client.Client.Bind(new IPEndPoint(IPAddress.Any, 5001));
+		_client.Client.Bind(new IPEndPoint(IPAddress.Any, 5001 + new RandomNumberGenerator().RandiRange(0, 1000)));
 		var thread = new Thread(StartProcess);
 		thread.Start();
 	}

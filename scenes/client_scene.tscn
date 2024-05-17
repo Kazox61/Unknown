@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://cv7xluspvpsij"]
 
-[ext_resource type="PackedScene" uid="uid://u4w4bepbxm2q" path="res://assets/maps/map1/map_1.tscn" id="1_s3qqn"]
+[ext_resource type="PackedScene" uid="uid://c47d2qgvo3s7w" path="res://assets/maps/map2/map.tscn" id="1_vnho0"]
 [ext_resource type="PackedScene" uid="uid://bqd61i6hq5eot" path="res://assets/ui/joystick/joystick.tscn" id="2_01cdv"]
 [ext_resource type="Script" path="res://scripts/game/client/ControllerClient.cs" id="3_kdwcl"]
 [ext_resource type="Script" path="res://scripts/game/client/ClientMessageManager.cs" id="4_cne3e"]
@@ -30,7 +30,8 @@ environment = SubResource("Environment_h2tba")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="map1" parent="." instance=ExtResource("1_s3qqn")]
+[node name="map" parent="." instance=ExtResource("1_vnho0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

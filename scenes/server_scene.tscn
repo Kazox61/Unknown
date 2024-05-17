@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8jm348pnar23"]
+[gd_scene load_steps=10 format=3 uid="uid://c8jm348pnar23"]
 
-[ext_resource type="PackedScene" uid="uid://u4w4bepbxm2q" path="res://assets/maps/map1/map_1.tscn" id="1_6vmfp"]
+[ext_resource type="PackedScene" uid="uid://c47d2qgvo3s7w" path="res://assets/maps/map2/map.tscn" id="1_ohcmt"]
 [ext_resource type="Script" path="res://scripts/game/server/ServerMessageManager.cs" id="3_lxv3j"]
 [ext_resource type="PackedScene" uid="uid://dvab3i4s6hvy7" path="res://assets/game/actor_server.tscn" id="3_nnv2x"]
 [ext_resource type="Script" path="res://scripts/game/ControllerVisionUpdate.cs" id="3_qmspr"]
+[ext_resource type="PackedScene" uid="uid://cnq5d4jaqwdu6" path="res://assets/game/actor_spawner.tscn" id="5_6ntib"]
+[ext_resource type="Script" path="res://scripts/game/server/ActorSpawnManager.cs" id="6_mok2c"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ddxsq"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -27,7 +29,21 @@ environment = SubResource("Environment_oju56")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="map1" parent="." instance=ExtResource("1_6vmfp")]
+[node name="map" parent="." instance=ExtResource("1_ohcmt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="ActorSpawner" parent="." instance=ExtResource("5_6ntib")]
+
+[node name="ActorSpawner2" parent="." instance=ExtResource("5_6ntib")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 14)
+
+[node name="ActorSpawner3" parent="." instance=ExtResource("5_6ntib")]
+transform = Transform3D(1, 0, 0, 0, -0.866025, -0.5, 0, 0.5, -0.866025, -35, 0, -30)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 85, 48)
+fov = 70.0
+far = 1000.0
 
 [node name="ServerMessageHandler" type="Node" parent="."]
 script = ExtResource("3_lxv3j")
@@ -37,7 +53,6 @@ script = ExtResource("3_qmspr")
 ServerMessageManager = NodePath("../ServerMessageHandler")
 PrefabActorServer = ExtResource("3_nnv2x")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 85, 48)
-fov = 70.0
-far = 1000.0
+[node name="ActorSpawnManager" type="Node" parent="." node_paths=PackedStringArray("ActorSpawners")]
+script = ExtResource("6_mok2c")
+ActorSpawners = [NodePath("../ActorSpawner"), NodePath("../ActorSpawner2"), NodePath("../ActorSpawner3")]
