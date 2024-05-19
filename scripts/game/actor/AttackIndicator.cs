@@ -8,7 +8,7 @@ public partial class AttackIndicator : MeshInstance3D {
 			immediateMesh.ClearSurfaces();
 		}
 		
-		DrawLine(Vector2.Zero, 2, 0.5f, new Color(0f, 0f, 0f));
+		DrawLine(Vector2.Zero, 5, 0.5f, new Color(0f, 0f, 0f));
 	}
 
 	public void DrawLine(Vector2 startPoint, float length, float thickness, Color color) {

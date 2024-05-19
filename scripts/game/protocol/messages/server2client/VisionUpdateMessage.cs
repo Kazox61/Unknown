@@ -44,7 +44,7 @@ public class VisionUpdateMessage : ProtocolMessage {
 			var actor = ControllerClient.Instance.GetActor(dataActorServer.MatchPlayerId)
 			            ?? ActorClient.Create(dataActorServer.MatchPlayerId, true);
 
-			actor.StartLerpPosition(new Vector3(dataActorServer.Position.X, 1, dataActorServer.Position.Y));
+			actor.StartLerpPosition(new Vector3(dataActorServer.Position.X, 0, dataActorServer.Position.Y));
 		}
 
 		return GDTask.CompletedTask;
