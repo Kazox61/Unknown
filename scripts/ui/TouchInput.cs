@@ -5,7 +5,9 @@ using System.Collections.Generic;
 namespace Unknown.UI;
 
 public partial class TouchInput : Node {
-	private double _time;
+	public const float TapTolerance = 10f;
+	
+	public double Time { get; private set; }
 
 	private readonly Dictionary<int, TouchData> _startTouches = new();
 	private readonly Dictionary<int, TouchData> _lastTouches = new();
@@ -25,7 +27,7 @@ public partial class TouchInput : Node {
 	public Action<TouchData> OnVerticalSwipeUp;
 
 	public override void _Process(double delta) {
-		_time += delta;
+		Time += delta;
 	}
 
 	public override void _Input(InputEvent @event) {
@@ -38,8 +40,8 @@ public partial class TouchInput : Node {
 					false,
 					touch.Position,
 					0f,
-					_time,
-					_time,
+					Time,
+					Time,
 					Vector2.Zero, 
 					Vector2.Zero,
 					Vector2.Zero
@@ -60,9 +62,9 @@ public partial class TouchInput : Node {
 					false,
 					true,
 					touch.Position,
-					(float)(_time - startData.StartTime),
+					(float)(Time - startData.StartTime),
 					startData.StartTime,
-					_time,
+					Time,
 					touch.Position - lastData.Position,
 					lastData.FrameDelta,
 					touch.Position - startData.Position
@@ -98,7 +100,7 @@ public partial class TouchInput : Node {
 				drag.Position,
 				0f,
 				startData.StartTime,
-				_time,
+				Time,
 				drag.Position - lastData.Position,
 				lastData.FrameDelta,
 				drag.Position - startData.Position
@@ -109,15 +111,6 @@ public partial class TouchInput : Node {
 			if (CurrentSwipeAxis == SwipeAxis.None) {
 				var horizontal = Mathf.Abs(data.MoveDelta.X) > Mathf.Abs(data.MoveDelta.Y);
 				CurrentSwipeAxis = horizontal ? SwipeAxis.Horizontal : SwipeAxis.Vertical;
-
-				switch (CurrentSwipeAxis) {
-					case SwipeAxis.Horizontal:
-						OnHorizontalSwipeDown?.Invoke(data);
-						break;
-					case SwipeAxis.Vertical:
-						OnVerticalSwipeDown?.Invoke(data);
-						break;
-				}
 			}
 			
 			OnFingerMove?.Invoke(data);

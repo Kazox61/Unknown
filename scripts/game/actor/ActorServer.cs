@@ -6,6 +6,8 @@ namespace Unknown.Game;
 public partial class ActorServer : CharacterBody3D {
 	private const float Speed = 64f;
 	private const float Friction = 10f;
+
+	[Export] public PackedScene PrefabProjectileLinear;
 	
 	public int MatchPlayerId;
 	public IPEndPoint IpEndPoint;

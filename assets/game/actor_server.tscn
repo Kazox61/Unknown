@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvab3i4s6hvy7"]
+[gd_scene load_steps=6 format=3 uid="uid://dvab3i4s6hvy7"]
 
 [ext_resource type="Script" path="res://scripts/game/actor/ActorServer.cs" id="1_kemni"]
+[ext_resource type="PackedScene" uid="uid://n76hw8k86q8p" path="res://assets/game/actor/projectile_linear.tscn" id="2_kmjw5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iulyj"]
 albedo_color = Color(0, 0.536759, 0.966432, 1)
@@ -13,6 +14,7 @@ size = Vector3(1, 2, 1)
 
 [node name="ActorServer" type="CharacterBody3D"]
 script = ExtResource("1_kemni")
+PrefabProjectileLinear = ExtResource("2_kmjw5")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

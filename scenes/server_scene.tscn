@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://c8jm348pnar23"]
 
-[ext_resource type="PackedScene" uid="uid://c47d2qgvo3s7w" path="res://assets/maps/map2/map.tscn" id="1_ohcmt"]
+[ext_resource type="PackedScene" uid="uid://cr1sdu8u4b6b6" path="res://assets/maps/map.tscn" id="1_nbj7k"]
 [ext_resource type="Script" path="res://scripts/game/server/ServerMessageManager.cs" id="3_lxv3j"]
 [ext_resource type="PackedScene" uid="uid://dvab3i4s6hvy7" path="res://assets/game/actor_server.tscn" id="3_nnv2x"]
 [ext_resource type="Script" path="res://scripts/game/ControllerVisionUpdate.cs" id="3_qmspr"]
@@ -29,16 +29,17 @@ environment = SubResource("Environment_oju56")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="map" parent="." instance=ExtResource("1_ohcmt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+[node name="GridMap" parent="." instance=ExtResource("1_nbj7k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 
 [node name="ActorSpawner" parent="." instance=ExtResource("5_6ntib")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 0, 39)
 
 [node name="ActorSpawner2" parent="." instance=ExtResource("5_6ntib")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0, -39)
 
 [node name="ActorSpawner3" parent="." instance=ExtResource("5_6ntib")]
-transform = Transform3D(1, 0, 0, 0, -0.866025, -0.5, 0, 0.5, -0.866025, -35, 0, -30)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39, 0, 39)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 85, 48)

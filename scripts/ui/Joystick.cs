@@ -8,6 +8,7 @@ public partial class Joystick : Control {
 	[Export] private Control _joystickKnob;
 	[Export] private Control _joystickRing;
 	[Export] private bool _isFixed;
+	[Export] private float _deadZone = 0.2f;
 
 
 	private bool _allowInput = true;
@@ -19,6 +20,7 @@ public partial class Joystick : Control {
 	public Vector2 Value => _value;
 	
 	public Action<Vector2> OnJoystickReleased;
+	public Action OnClick;
 
 	public override void _EnterTree() {
 		_touchInput.OnFingerDown += OnFingerDown;
@@ -85,7 +87,9 @@ public partial class Joystick : Control {
 		var length = Mathf.Min(touchData.Position.DistanceTo(ringCenter), maxLength);
 
 		var scaled = direction * length * (1 / maxLength);
-		_value = scaled;
+
+		_value = scaled.Length() > _deadZone ? scaled : Vector2.Zero;
+		
 		_joystickKnob.GlobalPosition = (ringCenter + direction * length - _joystickKnob.Size * 0.5f);
 	}
 
@@ -102,10 +106,17 @@ public partial class Joystick : Control {
 			_joystickKnob.GlobalPosition = _startPosition - _joystickKnob.Size * 0.5f;
 			_joystickRing.GlobalPosition = _startPosition - _joystickRing.Size * 0.5f;
 		}
+		
+		if (Value.Length() > _deadZone) {
+			OnJoystickReleased?.Invoke(Value);
+		}
+
+		if (touchData.Duration < 0.3f && touchData.MoveDelta.Length() < 5f) {
+			OnClick?.Invoke();
+		}
 
 		_value = Vector2.Zero;
 		_pressing = false;
 		_allowInput = true;
-		OnJoystickReleased?.Invoke(Value);
 	}
 }

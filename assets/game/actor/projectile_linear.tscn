@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://n76hw8k86q8p"]
+
+[ext_resource type="Script" path="res://scripts/game/actor/ProjectileLinear.cs" id="1_dj08i"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_4ogng"]
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hga4w"]
+radius = 0.25
+
+[node name="ProjectileLinear" type="Node3D"]
+script = ExtResource("1_dj08i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_4ogng")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("SphereShape3D_hga4w")
